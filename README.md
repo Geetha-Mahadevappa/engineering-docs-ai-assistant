@@ -1,4 +1,4 @@
-# mcp-agent-distributed-finetuning
+# engineering-docs-ai-assistant
 ## Tech Stack
 - LangChain — https://python.langchain.com
 - GraphQL — https://strawberry.rocks
@@ -9,5 +9,6 @@
 
 ## Overview
 
-This project is designed as a small internal **AI Knowledge Assistant** that helps technical teams search documents, store notes, retrieve information, and call different tools through a single agent. The system uses a **modular**, 
-**MCP‑inspired design with a GraphQL API**, a **tool‑using agent**, and a **distributed‑ready fine‑tuning** setup. It’s meant to represent how modern AI platforms structure internal assistants for engineering and research teams.
+This project is a **small internal AI assistant** built to help **engineering teams** work with their **technical documents** more easily. It can search across **design docs, RFCs, runbooks, and notes,** and it brings everything together through a single agent that knows how to use different tools.
+
+The system follows a **modular, MCP‑inspired design**. It exposes a **GraphQL API** for interacting with the assistant, uses **LangChain** to handle tool‑use and reasoning, and includes a **distributed‑ready fine‑tuning** setup powered by **PyTorch FSDP**. The goal is to provide a simple but realistic example of how modern AI systems organize document search, retrieval, and agentic workflows in a clean, production‑style way.
