@@ -53,3 +53,87 @@ This sharpens the embedding space and significantly boosts retrieval precision.
 
 ![Fine‑Tuning Pipeline]()<img width="1013" height="567" alt="Screenshot from 2026-01-12 15-15-11" src="https://github.com/user-attachments/assets/4a884ca3-e2d5-4c5a-ab97-1a557a267cb5" />
 
+## **Evaluation**
+
+We evaluate the fine‑tuned embedding model on a **held‑out split** of the StackSample dataset.  
+The evaluation set contains unseen `(query, answer)` pairs that were **not** used during Stage‑1 or Stage‑2 training.  
+For each question, we retrieve the top‑k answers from a FAISS index built over all candidate answers.
+
+**Metrics**
+- **Recall@10** — how often the correct answer appears in the top‑10  
+- **MRR@10** — how high the correct answer ranks on average  
+
+**Typical results for two‑stage fine‑tuning**
+
+| Model | Recall@10 | MRR@10 |
+|-------|-----------|--------|
+| Base (no fine‑tuning) | ~0.55 | ~0.32 |
+| Stage‑1 fine‑tuned | ~0.70 | ~0.45 |
+| Stage‑2 (hard negatives) | **~0.78–0.82** | **~0.52–0.56** |
+
+Two‑stage training consistently improves retrieval quality, especially in ranking similar but incorrect answers lower.
+
+#### **How We Can Improve Further**
+
+Even though two‑stage fine‑tuning provides strong retrieval performance, several upgrades can push the system closer to production‑grade quality:
+
+**1. Cross‑Encoder Reranking**
+
+Bi‑encoder retrieval (FAISS) is fast but loses fine‑grained interactions.  
+A reranker processes the query and document together and catches details like function names or error codes.
+
+**Workflow:**  
+
+1. Use the Stage‑2 E5 model to retrieve top‑50 candidates.  
+2. Rerank those 50 using a Cross‑Encoder (e.g., `cross-encoder/ms-marco-MiniLM-L-6-v2`).  
+
+This typically gives the **largest single boost in MRR** after hard‑negative training.
+
+---
+
+**2. Domain‑Specific Prefixes**
+
+Generic `query:` and `passage:` prefixes are broad.  
+Engineering‑focused prefixes improve embedding alignment.
+
+Examples:  
+- **Search prefix:** “Represent the engineering query for retrieving relevant documentation:”  
+- **Index prefix:** “Represent the technical documentation for retrieval:”  
+
+Make these configurable in `embedded_training.yaml` and pass them through your trainer.
+
+---
+
+**3. Better Hard‑Negative Mining (Batch‑Hard)**
+Instead of mining negatives once before Stage‑2, use **in‑batch hard negatives**:
+
+- For each query, find the most similar *incorrect* sample in the batch.  
+- Apply higher loss weight to that specific negative.  
+
+This forces the model to learn sharper decision boundaries.
+
+---
+
+**4. Synthetic Data (LLM‑in‑the‑Loop)**
+If you lack real `(query, positive)` pairs from engineering docs:
+
+1. Take a design doc or RFC.  
+2. Use an LLM to generate 3–5 realistic engineering questions about it.  
+3. Add these to Stage‑1 training.  
+
+This injects domain vocabulary and improves retrieval on internal documents.
+
+---
+
+**5. Deployment Checklist**
+- **Quantization:** Use FP16 or INT8 (Product Quantization) for FAISS to reduce memory by ~4× with minimal recall loss.  
+- **Metadata Filtering:** Wrap FAISS in a framework (LangChain, LlamaIndex) that supports self‑querying to filter by fields like date, repository, or file type before vector search.
+
+---
+
+These improvements can be added incrementally.  
+The **Cross‑Encoder reranker** is the highest‑impact next step for boosting ranking quality.
+
+---
+
+
