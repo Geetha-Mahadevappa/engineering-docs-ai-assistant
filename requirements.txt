@@ -10,3 +10,5 @@ pyyaml
 requests
 python-dotenv
 torch
+kagglehub
+pandas
