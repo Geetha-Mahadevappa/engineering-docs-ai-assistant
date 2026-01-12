@@ -24,9 +24,11 @@ class EmbeddingModel:
         else:
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        # Load tokenizer + model from the local directory
+        # Load tokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModel.from_pretrained(model_path)
+
+        # Load model in INT8 using bitsandbytes
+        self.model = AutoModel.from_pretrained(model_path, load_in_8bit=True, device_map="auto")
 
         self.model.to(self.device)
         self.model.eval()
