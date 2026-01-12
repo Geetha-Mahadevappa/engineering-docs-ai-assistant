@@ -6,11 +6,11 @@ index_path: "models/fine_tuned_e5/faiss.index"
 
 train_pairs: "data/processed/train_pairs.jsonl"
 train_pairs_hard: "data/processed/train_pairs_hard.jsonl"
-batch_size: 4
-epochs: 5
+batch_size: 16
+epochs: 30
 learning_rate: 0.001
 margin: 0.2
-max_length: 64
+max_length: 512
 
 temperature: 0.05
 
