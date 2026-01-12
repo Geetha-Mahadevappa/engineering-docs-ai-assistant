@@ -125,12 +125,6 @@ This injects domain vocabulary and improves retrieval on internal documents.
 
 ---
 
-**5. Deployment Checklist**
-- **Quantization:** Use FP16 or INT8 (Product Quantization) for FAISS to reduce memory by ~4× with minimal recall loss.  
-- **Metadata Filtering:** Wrap FAISS in a framework (LangChain, LlamaIndex) that supports self‑querying to filter by fields like date, repository, or file type before vector search.
-
----
-
 These improvements can be added incrementally.  
 The **Cross‑Encoder reranker** is the highest‑impact next step for boosting ranking quality.
 
