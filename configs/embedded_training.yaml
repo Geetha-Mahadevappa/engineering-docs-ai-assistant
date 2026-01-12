@@ -1,0 +1,19 @@
+model_name: "intfloat/multilingual-e5-base"
+
+kaggle_data: "data/kaggle/"
+model_output_path: "models/fine_tuned_e5/"
+index_path: "models/fine_tuned_e5/faiss.index"
+
+train_pairs: "data/processed/train_pairs.jsonl"
+train_pairs_hard: "data/processed/train_pairs_hard.jsonl"
+batch_size: 4
+epochs: 5
+learning_rate: 0.001
+margin: 0.2
+max_length: 64
+
+temperature: 0.05
+
+device: "cuda"   # or "cpu"
+n_gpus: 1   # set >1 for multi-gpu training
+
