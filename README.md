@@ -14,9 +14,6 @@ This project is a **small internal AI assistant** built to help **engineering te
 
 The system follows a **modular, MCP‑inspired design**. It exposes a **GraphQL API** for interacting with the assistant, uses **LangChain** to handle tool‑use and reasoning, and includes a **distributed‑ready fine‑tuning** setup powered by **PyTorch FSDP**. The goal is to provide a simple but realistic example of how modern AI systems organize document search, retrieval, and agentic workflows in a clean, production‑style way.
 
-Here’s a short, clean, human‑written version you can drop straight into your README.  
-It includes the link, why you use the dataset, and a quick note on its limitations — all in simple language.
-
 ---
 
 ## **Dataset**
