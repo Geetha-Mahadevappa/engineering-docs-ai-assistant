@@ -12,3 +12,7 @@ python-dotenv
 torch
 kagglehub
 pandas
+qdrant-client
+redis
+langchain-core
+rank-bm25
