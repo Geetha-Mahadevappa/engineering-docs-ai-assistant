@@ -1,0 +1,24 @@
+embedding_service:
+  url: "http://localhost:8001/embed"   # Endpoint for the external embedding API
+
+qdrant:
+  url: "http://localhost:6333"         # Qdrant vector database URL
+  collection: "documents"              # Collection where all vectors are stored
+
+chunking:
+  max_chars: 800                       # Max characters per chunk before embedding
+
+ingestion:
+  batch_size: 500                      # Number of chunks to upload to Qdrant per batch
+
+embedding:
+  dimension: 768                       # Size of dense embedding vectors (E5 output size)
+
+redis:
+  url: "redis://localhost:6379"        # Redis instance for conversation memory
+
+llm:
+  provider: "ollama"                   # LLM backend: "ollama" or "vllm"
+  model: "llama3.1:8b"                 # Model name to load from the provider
+  base_url: "http://localhost:11434"   # LLM server endpoint
+  temperature: 0.1                     # Controls creativity vs. determinism
