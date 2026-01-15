@@ -4,7 +4,7 @@ Handles PDF, text, and markdown files.
 """
 
 import os
-from typing import Dict, Any, List
+import datetime
 from langchain_core.tools import tool
 
 from agent.utils.file_loader import load_text_from_file
@@ -14,7 +14,7 @@ from agent.config import CONFIG
 
 
 @tool("upload_document")
-def upload_document_tool(file_path: str) -> str:
+def upload_document_tool(file_path: str, current_user_id: str = None, current_project_id: str = None) -> str:
     """
     Ingest a document into the vector store.
     file_path: path to the document on disk.
@@ -59,12 +59,15 @@ def upload_document_tool(file_path: str) -> str:
             end = min(start + batch_size, total_chunks)
             batch_chunks = chunks[start:end]
 
-            metadata: Dict[str, Any] = {
+            metadata = {
                 "doc_id": doc_id,
                 "batch_start": start,
                 "batch_end": end - 1,
                 "total_chunks": total_chunks,
                 "file_type": file_ext,
+                "ingested_at": datetime.now(datetime.timezone.utc).isoformat(),
+                "user_id": current_user_id,  # passed from conversation agent
+                "project_id": current_project_id,  # optional
             }
 
             # DocumentMemory handles embedding + upsert and returns a status
