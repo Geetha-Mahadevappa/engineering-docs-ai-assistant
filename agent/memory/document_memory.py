@@ -16,6 +16,8 @@ from qdrant_client.models import (
     VectorParams,
     PointStruct,
     SparseVector,
+    SparseVectorParams,
+    SparseIndexParams,
 )
 from agent.config import CONFIG
 
@@ -37,19 +39,20 @@ class DocumentMemory:
 
         embedding_dim = CONFIG["embedding"]["dimension"]
 
-        # Create collection if missing
-        self.client.recreate_collection(
-            collection_name=self.collection_name,
-            vectors_config={
-                "dense": VectorParams(
+        # Create collection ONLY if missing (no data loss)
+        if not self.client.collection_exists(self.collection_name):
+            self.client.create_collection(
+                collection_name=self.collection_name,
+                vectors_config=VectorParams(
                     size=embedding_dim,
-                    distance=Distance.COSINE,
-                )
-            },
-            sparse_vectors_config={
-                "sparse": {}
-            }
-        )
+                    distance=Distance.COSINE
+                ),
+                sparse_vectors_config={
+                    "sparse-text": SparseVectorParams(
+                        index=SparseIndexParams(on_disk=True)  # Persistent sparse index
+                    )
+                }
+            )
 
     # Batch Upsert for Document Ingestion
     def add_document(self, text_chunks: List[str], metadata: Dict[str, Any]) -> Dict[str, Any]:
@@ -60,6 +63,16 @@ class DocumentMemory:
         try:
             if not text_chunks:
                 return {"status": "error", "message": "No text chunks provided."}
+
+            # Ensure isolation metadata exists
+            required_keys = ["user_id", "project_id", "doc_id"]
+            missing = [k for k in required_keys if k not in metadata]
+
+            if missing:
+                return {
+                    "status": "error",
+                    "message": f"Security violation: Missing required metadata keys: {missing}"
+                }
 
             # Dense embeddings
             prefixed = [f"passage: {chunk}" for chunk in text_chunks]
@@ -98,4 +111,3 @@ class DocumentMemory:
 
         except Exception as e:
             return {"status": "error", "message": str(e)}
-
