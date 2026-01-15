@@ -16,3 +16,14 @@ qdrant-client
 redis
 langchain-core
 rank-bm25
+elasticsearch
+bitsandbytes
+transformers
+langchain-openai
+langchain-text-splitters
+pypdf
+python-docx
+unstructured
+fastapi-cors
+pydantic-settings
+gunicorn
