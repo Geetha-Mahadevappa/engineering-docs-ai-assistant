@@ -7,10 +7,16 @@ from agent.tools.upload_agent import upload_document_tool
 from agent.tools.search_documents import search_documents_tool
 from agent.config import CONFIG
 
-_agent_cache = {}
+from cachetools import TTLCache
 
+cache_cfg = CONFIG.get("agent_cache", {})
+maxsize = cache_cfg.get("maxsize", 100)
+ttl = cache_cfg.get("ttl_seconds", 3600)
+
+_agent_cache = TTLCache(maxsize=maxsize, ttl=ttl)
 
 def build_agent(chat_id: str):
+    # Return cached agent if available
     if chat_id in _agent_cache:
         return _agent_cache[chat_id]
 
@@ -30,7 +36,6 @@ def build_agent(chat_id: str):
                 temperature=temperature,
                 base_url=base_url
             )
-            llm.invoke("ping")  # health check
         except Exception:
             return None
 
@@ -42,7 +47,6 @@ def build_agent(chat_id: str):
                 openai_api_base=base_url,
                 temperature=temperature,
             )
-            llm.invoke("ping")
         except Exception:
             return None
 
@@ -74,4 +78,7 @@ def run_agent(chat_id: str, query: str) -> str:
     if agent is None:
         return "The AI model is temporarily unavailable. Please try again later."
 
-    return agent.run(query)
+    try:
+        return agent.run(query)
+    except Exception:
+        return "The AI model encountered an error while processing your request. Please try again."
