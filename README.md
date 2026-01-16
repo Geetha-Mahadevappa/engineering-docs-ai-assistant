@@ -41,7 +41,7 @@ The dataset is **used only for embedding fine-tuning** and is **not** used as a 
 
 ## 🔍 Embedding Fine-Tuning
 
-We fine-tune the **intfloat/multilingual-e5-base** model to improve retrieval quality for engineering-focused content.
+We fine-tune the **multilingual-e5-base** model to improve retrieval quality for engineering-focused content.
 
 ### Why fine-tune?
 
