@@ -13,6 +13,7 @@ ingestion:
 
 embedding:
   dimension: 768                       # Size of dense embedding vectors (E5 output size)
+  model_path: "../models/e5_finetuned"
 
 redis:
   url: "redis://localhost:6379"        # Redis instance for conversation memory
