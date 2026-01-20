@@ -1,0 +1,47 @@
+backend:
+  build:
+    context: .
+    dockerfile: Dockerfile.backend
+
+  # GPU access
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - capabilities: [gpu]
+
+  runtime: nvidia
+
+  # Environment variables for your agents + storage
+  environment:
+    NVIDIA_VISIBLE_DEVICES: all
+    NVIDIA_DRIVER_CAPABILITIES: compute,utility
+
+    # Backend config
+    QDRANT_URL: http://qdrant:6333
+    ES_URL: http://elasticsearch:9200
+    REDIS_URL: redis://redis:6379
+
+    # Optional: production flags
+    LOG_LEVEL: "info"
+    WORKERS: "4"
+
+  # Ensure backend waits for dependencies
+  depends_on:
+    - qdrant
+    - elasticsearch
+    - redis
+
+  # Expose API
+  ports:
+    - "8000:8000"
+
+  # Restart automatically if it crashes
+  restart: unless-stopped
+
+  # Health check for orchestrators (Docker, K8s, etc.)
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
