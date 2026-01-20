@@ -12,6 +12,9 @@ from agent.utils.chunking import chunk_text
 from agent.memory.document_memory import DocumentMemory
 from agent.config import CONFIG
 
+from agent.embeddings.embedding_model import EmbeddingModel
+from agent.retrieval.sparse_encoder import BM25Encoder
+
 
 @tool("upload_document")
 def upload_document_tool(file_path: str, current_user_id: str = None, current_project_id: str = None) -> str:
@@ -50,7 +53,12 @@ def upload_document_tool(file_path: str, current_user_id: str = None, current_pr
 
         doc_id = os.path.basename(file_path)
         file_ext = os.path.splitext(doc_id)[1].lower()
-        memory = DocumentMemory()
+
+        # Load models for ingestion
+        model_path = CONFIG["embedding"]["model_path"]
+        dense_model = EmbeddingModel(model_path=model_path)
+        sparse_encoder = BM25Encoder()
+        memory = DocumentMemory(dense_model, sparse_encoder)
 
         total_chunks = len(chunks)
 
