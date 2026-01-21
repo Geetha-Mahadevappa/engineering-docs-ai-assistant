@@ -5,36 +5,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
-
-    runtime: nvidia
-
     environment:
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
-
       QDRANT_URL: http://qdrant:6333
       ES_URL: http://elasticsearch:9200
       REDIS_URL: redis://redis:6379
-
       LOG_LEVEL: "info"
       WORKERS: "4"
-
     depends_on:
       - qdrant
       - elasticsearch
       - redis
-
     ports:
       - "8000:8000"
-
     restart: unless-stopped
-
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 10s
@@ -55,15 +40,33 @@ services:
     ports:
       - "6333:6333"
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+    mem_limit: 4g            # ensure host/VM has at least this much available
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://localhost:9200/_cluster/health | grep -q '\"status\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
+volumes:
+  es_data:
