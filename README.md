@@ -148,7 +148,7 @@ The UI focuses on **transparency, debugging, and trust**.
 - User feedback (correct / incorrect)
 - Visible project-level access control
 
-*(Screenshots will be added.)*
+<img width="1798" height="997" alt="Screenshot from 2026-01-21 15-50-57" src="https://github.com/user-attachments/assets/44d17fa0-f6e9-4519-8239-86727082e8dc" />
 
 ---
 
