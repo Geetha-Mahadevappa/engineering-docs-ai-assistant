@@ -1,0 +1,152 @@
+[
+  {
+    "id": "q1",
+    "question": "What are the main components of the Kubernetes control plane?",
+    "expected_answer": "The control plane includes the API server, scheduler, controller manager, etcd, and cloud-controller-manager."
+  },
+  {
+    "id": "q2",
+    "question": "What is the role of the kube-apiserver?",
+    "expected_answer": "It exposes the Kubernetes API and acts as the central management point for the cluster."
+  },
+  {
+    "id": "q3",
+    "question": "Explain the function of the kube-scheduler.",
+    "expected_answer": "It assigns pods to nodes based on resource requirements, constraints, and scheduling policies."
+  },
+  {
+    "id": "q4",
+    "question": "What does the kube-controller-manager do?",
+    "expected_answer": "It runs controllers that regulate the state of the cluster, such as node, replication, and endpoint controllers."
+  },
+  {
+    "id": "q5",
+    "question": "What is etcd used for in Kubernetes?",
+    "expected_answer": "It stores all cluster data, configuration, and state in a distributed key-value store."
+  },
+  {
+    "id": "q6",
+    "question": "What is a Pod in Kubernetes?",
+    "expected_answer": "A Pod is the smallest deployable unit in Kubernetes, containing one or more containers."
+  },
+  {
+    "id": "q7",
+    "question": "How is a Deployment different from a StatefulSet?",
+    "expected_answer": "Deployments manage stateless workloads; StatefulSets manage stateful workloads with stable identities."
+  },
+  {
+    "id": "q8",
+    "question": "What is a ReplicaSet?",
+    "expected_answer": "A ReplicaSet ensures a specified number of pod replicas are running at any given time."
+  },
+  {
+    "id": "q9",
+    "question": "What is a DaemonSet?",
+    "expected_answer": "A DaemonSet ensures that a copy of a pod runs on all or selected nodes."
+  },
+  {
+    "id": "q10",
+    "question": "What is a Kubernetes Service?",
+    "expected_answer": "A Service provides stable networking and load balancing for a set of pods."
+  },
+  {
+    "id": "q11",
+    "question": "Explain ClusterIP, NodePort, and LoadBalancer services.",
+    "expected_answer": "ClusterIP exposes internally, NodePort exposes on each node, LoadBalancer provisions an external load balancer."
+  },
+  {
+    "id": "q12",
+    "question": "What is kube-proxy responsible for?",
+    "expected_answer": "It maintains network rules on nodes and enables service-based communication."
+  },
+  {
+    "id": "q13",
+    "question": "What is the Container Network Interface (CNI)?",
+    "expected_answer": "CNI defines how networking is configured for containers and pods."
+  },
+  {
+    "id": "q14",
+    "question": "What is a ConfigMap?",
+    "expected_answer": "A ConfigMap stores non-sensitive configuration data for pods."
+  },
+  {
+    "id": "q15",
+    "question": "What is a Secret in Kubernetes?",
+    "expected_answer": "A Secret stores sensitive data such as passwords, tokens, and keys."
+  },
+  {
+    "id": "q16",
+    "question": "What is the purpose of a Namespace?",
+    "expected_answer": "Namespaces provide logical isolation within a cluster."
+  },
+  {
+    "id": "q17",
+    "question": "What is a PersistentVolume?",
+    "expected_answer": "A PersistentVolume is a piece of storage provisioned for use by pods."
+  },
+  {
+    "id": "q18",
+    "question": "What is a PersistentVolumeClaim?",
+    "expected_answer": "A PVC is a request for storage by a user or pod."
+  },
+  {
+    "id": "q19",
+    "question": "What is the role of the kubelet?",
+    "expected_answer": "The kubelet ensures containers are running in pods on a node."
+  },
+  {
+    "id": "q20",
+    "question": "What happens when a node fails in Kubernetes?",
+    "expected_answer": "The node controller marks it unreachable and reschedules pods to healthy nodes."
+  },
+  {
+    "id": "q21",
+    "question": "What is Horizontal Pod Autoscaling?",
+    "expected_answer": "It automatically adjusts the number of pod replicas based on metrics like CPU usage."
+  },
+  {
+    "id": "q22",
+    "question": "What is a Job in Kubernetes?",
+    "expected_answer": "A Job runs tasks to completion rather than continuously."
+  },
+  {
+    "id": "q23",
+    "question": "What is a CronJob?",
+    "expected_answer": "A CronJob runs Jobs on a scheduled basis."
+  },
+  {
+    "id": "q24",
+    "question": "What is the difference between Ingress and a Service?",
+    "expected_answer": "Ingress manages external HTTP routing; Services manage internal/external networking for pods."
+  },
+  {
+    "id": "q25",
+    "question": "What is the Kubernetes API object model?",
+    "expected_answer": "Kubernetes objects represent desired state and are managed via the API server."
+  },
+  {
+    "id": "q26",
+    "question": "What is the reconciliation loop?",
+    "expected_answer": "Controllers continuously compare desired state to actual state and take corrective action."
+  },
+  {
+    "id": "q27",
+    "question": "What is a Node in Kubernetes?",
+    "expected_answer": "A Node is a worker machine that runs pods."
+  },
+  {
+    "id": "q28",
+    "question": "What is the purpose of labels and selectors?",
+    "expected_answer": "They organize and select Kubernetes objects for operations like Services and Deployments."
+  },
+  {
+    "id": "q29",
+    "question": "What is a Taint and Toleration?",
+    "expected_answer": "Taints repel pods; tolerations allow pods to be scheduled on tainted nodes."
+  },
+  {
+    "id": "q30",
+    "question": "What is the Kubernetes admission controller?",
+    "expected_answer": "It intercepts API requests and can modify or validate them before persistence."
+  }
+]
