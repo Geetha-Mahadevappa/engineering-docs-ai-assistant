@@ -1,67 +1,66 @@
-.app-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px;
+.app-layout {
+  display: flex;
+  height: 100vh;
   font-family: sans-serif;
 }
 
-.chat-container {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: #f7f7f7;
+  border-right: 1px solid #ddd;
   padding: 15px;
-  height: 500px;
+  overflow-y: auto;
+}
+
+.session-item {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.session-item:hover {
+  background: #eef6ff;
+}
+
+/* Main panel */
+.main-panel {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 15px;
+  gap: 15px;
 }
 
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.bubble {
-  padding: 10px;
+/* Upload widget */
+.upload-box {
+  border: 2px dashed #aaa;
+  padding: 20px;
   border-radius: 8px;
-  margin-bottom: 12px;
+  text-align: center;
 }
 
-.bubble.user {
-  background: #e0f7ff;
-  align-self: flex-end;
-}
-
-.bubble.assistant {
-  background: #f0f0f0;
-  align-self: flex-start;
-}
-
-.input-row {
+/* Search bar */
+.search-bar {
   display: flex;
   gap: 10px;
 }
 
-.chat-input {
+.search-input {
   flex: 1;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #aaa;
 }
 
-.send-btn {
+.search-btn {
   padding: 10px 16px;
-  border: none;
   background: #0078ff;
   color: white;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
-}
-
-.sources {
-  margin-left: 10px;
-  font-size: 0.85em;
-}
-
-.source-item {
-  margin-top: 5px;
 }
