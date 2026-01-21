@@ -1,6 +1,6 @@
 langchain
 langchain-community
-faiss-cpu
+faiss-gpu
 sentence-transformers
 strawberry-graphql
 fastapi
@@ -27,3 +27,4 @@ unstructured
 fastapi-cors
 pydantic-settings
 gunicorn
+
