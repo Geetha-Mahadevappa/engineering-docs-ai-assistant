@@ -2,8 +2,8 @@ import strawberry
 from fastapi import FastAPI, UploadFile, File
 from strawberry.fastapi import GraphQLRouter
 
-from agent.runner import run_agent
-from agent.tools.upload_agent import process_uploaded_file
+from agent.agents.conversation_agent import run_agent
+from agent.tools.upload_agent import upload_document_tool
 
 
 # GraphQL Schema
@@ -41,5 +41,5 @@ def health():
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
     content = await file.read()
-    process_uploaded_file(file.filename, content)
+    upload_document_tool(file.filename, content)
     return {"status": "uploaded"}
