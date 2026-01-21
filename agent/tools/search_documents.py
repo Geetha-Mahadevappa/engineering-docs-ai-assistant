@@ -33,26 +33,40 @@ def search_documents_tool(query: str, current_user_id: str = None, current_proje
         if not current_project_id:
             return "USER_ERROR: Missing project_id for retrieval."
 
+        # Ensure top_k is a reasonable integer
+        try:
+            k = max(1, min(50, int(top_k)))
+        except Exception:
+            k = 5
+
         # Perform hybrid search + reranking
         results = retrieval_agent.search(
             query=query,
             user_id=current_user_id,
             project_id=current_project_id,
-            top_k=top_k,
+            top_k=k,
         )
 
         if not results:
             return "No relevant documents found."
 
-        # Format results for the Conversation Agent
+        # Format results for the Conversation Agent (safe access + truncation)
         formatted = []
         for r in results:
+            score = float(r.get("score") or 0.0)
+            text = r.get("text") or ""
+            # truncate long text to 1000 chars to keep chat concise
+            if len(text) > 1000:
+                text = text[:1000].rstrip() + "…"
+            doc_id = r.get("doc_id", "unknown")
+            chunk_id = r.get("chunk_id", "unknown")
+
             formatted.append(
-                f"[Score: {r['score']:.4f}] {r['text']} "
-                f"(doc_id={r['doc_id']}, chunk={r['chunk_id']})"
+                f"[Score: {score:.4f}] {text} (doc_id={doc_id}, chunk={chunk_id})"
             )
 
         return "\n\n".join(formatted)
 
-    except Exception as e:
-        return f"RETRIEVAL_ERROR: Failed to search documents. Details: {str(e)}"
+    except Exception:
+        # Avoid returning raw exception text to the user; log internally instead.
+        return "RETRIEVAL_ERROR: Failed to search documents. Please try again later."
