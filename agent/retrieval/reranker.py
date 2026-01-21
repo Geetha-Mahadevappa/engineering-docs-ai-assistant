@@ -9,8 +9,11 @@ or keyword scoring.
 """
 
 from typing import List, Dict, Any
+import logging
 from sentence_transformers import CrossEncoder
 from agent.config import CONFIG
+
+logger = logging.getLogger(__name__)
 
 
 class Reranker:
@@ -38,28 +41,28 @@ class Reranker:
             return []
 
         try:
-            # Prepare (query, text) pairs
+            # Prepare(query, text) pairs
             pairs = [[query, c.get("text", "")] for c in candidates]
-
-            # Predict relevance scores
             scores = self.model.predict(pairs)
+            if len(scores) != len(candidates):
+                # log and fallback
+                logger.warning("Reranker returned %d scores for %d candidates", len(scores), len(candidates))
+                return candidates
 
-            # Attach cross‑encoder scores
             for i, score in enumerate(scores):
                 candidates[i]["score"] = float(score)
 
-            # Sort by:
-            #   1. cross‑encoder score
-            #   2. RRF recall score
+            # stable sort: primary score, secondary rrf_score, tertiary doc_id
             return sorted(
                 candidates,
                 key=lambda x: (
                     x.get("score", 0.0),
                     x.get("rrf_score", 0.0),
+                    x.get("doc_id", "")
                 ),
                 reverse=True,
             )
 
-        except Exception:
-            # If scoring fails, return the unranked candidates.
+        except Exception as exc:
+            logger.exception("Reranker failed: %s", exc)
             return candidates
